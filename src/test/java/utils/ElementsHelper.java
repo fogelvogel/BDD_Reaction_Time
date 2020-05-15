@@ -3,37 +3,26 @@ package utils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-public class ElementsHelper {
-    public WebElement waitForElement(String selector, WebDriver driver, WebDriverWait wait) {
-        wait.until(
-                ExpectedConditions.visibilityOfElementLocated(
-                        By.cssSelector("[class^=\"view-splash\"]")
-                )
-        );
-        return driver.findElement(By.cssSelector("[class^=\"view-splash\"]"));
+public abstract class ElementsHelper {
+    public static WebElement waitForElement(String selector, WebDriver driver, WebDriverWait wait) {
+        By by = By.cssSelector(selector);
+        ExpectedCondition condition = ExpectedConditions.visibilityOfElementLocated(by);
+
+        wait.until(condition);
+        return driver.findElement(by);
     }
 
-    public WebElement waitForElement(String selector, WebDriver driver) {
-        WebDriverWait wait = new WebDriverWait(driver,30);
-        wait.until(
-                ExpectedConditions.visibilityOfElementLocated(
-                        By.cssSelector("[class^=\"view-splash\"]")
-                )
-        );
-        return driver.findElement(By.cssSelector("[class^=\"view-splash\"]"));
+    public static WebElement waitForElement(String selector, WebDriver driver) {
+        return waitForElement(selector, driver, 30);
     }
 
-    public WebElement waitForElement(String selector, WebDriver driver, int waitSeconds) {
+    public static WebElement waitForElement(String selector, WebDriver driver, int waitSeconds) {
         WebDriverWait wait = new WebDriverWait(driver,waitSeconds);
-        wait.until(
-                ExpectedConditions.visibilityOfElementLocated(
-                        By.cssSelector("[class^=\"view-splash\"]")
-                )
-        );
-        return driver.findElement(By.cssSelector("[class^=\"view-splash\"]"));
-    }
 
+        return waitForElement(selector, driver, wait);
+    }
 }
